@@ -1,18 +1,25 @@
+import os
 import asyncio
-from aiogram import Bot, Dispatcher, F
-from aiogram.types import Message
-from aiogram.filters import CommandStart, Command
+from aiogram import Bot, Dispatcher, F, types
 
-from app.handlers import router
+from dotenv import find_dotenv, load_dotenv
+load_dotenv(find_dotenv())
+
+from app.handlers.user import user_router
+from app.handlers.user_group import user_groups_router
 from app.database.models import async_main
+from common.bot_cmds_list import privet
 
 
 async def main():
     await async_main()
-    bot = Bot(token='7168793031:AAGUb9tIbtmSgUTc2H1ZpLS2AR7n70fEeks')
+    bot = Bot(token=os.getenv('TOKEN'))
     dp = Dispatcher()
-    dp.include_router(router)
-    await dp.start_polling(bot)
+    dp.include_router(user_router)
+    dp.include_router(user_groups_router)
+    await bot.delete_webhook(drop_pending_updates=True)
+    await bot.set_my_commands(commands=privet, scope=types.BotCommandScopeAllPrivateChats())
+    await dp.start_polling(bot, allowed_updates=['message', 'callback_query','edited_message'])
 
 
 if __name__ == '__main__':

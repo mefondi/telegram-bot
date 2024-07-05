@@ -13,28 +13,37 @@ user_router.message.filter(ChatTypeFilter(['private']))
 @user_router.message(CommandStart())
 async def cmd_start(message: Message):
     await rq.set_user(message.from_user.id)
-    await message.answer('привет, это магазин кроссоовок', reply_markup=kb.main)
+    await message.answer('привет 🖐️, это магазин кроссоовок', reply_markup=kb.main)
 
 # @user_router.message(Command('catalog'))
-@user_router.message(or_f(Command('catalog'), (F.text == 'каталог')))
+@user_router.message(or_f(Command('catalog'), (F.text == 'каталог 📁')))
 async def catelog(message: Message): 
     await message.answer('выберите категорию товара', reply_markup=await kb.categories())
     
 @user_router.message(Command('about'))
-@user_router.message(F.text == 'о нас')
+@user_router.message(F.text == 'о нас 😇')
 async def catelog(message: Message):   
-    await message.answer('о нас:')
+    await message.answer('о нас:', reply_markup= kb.get)
     
 @user_router.message(Command('basket'))
-@user_router.message(F.text == 'корзина')
+@user_router.message(F.text == 'корзина 🗑️')
 async def catelog(message: Message):    
     await message.answer('корзина')
     
 @user_router.message(Command('contacts'))
-@user_router.message(F.text == 'контакты')
+@user_router.message(F.text == 'контакты 📱')
 async def catelog(message: Message): 
     await message.answer('контакты')
 
+@user_router.message(F.contact)
+async def contact(message: Message):
+    await message.answer('контакт:')
+    await message.answer(str(message.contact))
+    
+@user_router.message(F.location)
+async def contact(message: Message):
+    await message.answer('локация')
+    await message.answer(str(message.location))
 
 
 @user_router.callback_query(F.data.startswith('category_'))

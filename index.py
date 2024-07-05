@@ -7,6 +7,7 @@ load_dotenv(find_dotenv())
 
 from app.handlers.user import user_router
 from app.handlers.user_group import user_groups_router
+from app.handlers.admin import admin_router
 from app.database.models import async_main
 from common.bot_cmds_list import privet
 
@@ -14,9 +15,11 @@ from common.bot_cmds_list import privet
 async def main():
     await async_main()
     bot = Bot(token=os.getenv('TOKEN'))
+    bot.list_admin = []
     dp = Dispatcher()
     dp.include_router(user_router)
     dp.include_router(user_groups_router)
+    dp.include_router(admin_router)
     await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_my_commands(commands=privet, scope=types.BotCommandScopeAllPrivateChats())
     await dp.start_polling(bot, allowed_updates=['message', 'callback_query','edited_message'])

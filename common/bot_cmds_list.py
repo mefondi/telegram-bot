@@ -6,4 +6,5 @@ privet = [
     BotCommand(command='/about', description='о нас'),
     BotCommand(command='/basket', description='корзина'),
     BotCommand(command='/contacts', description='контакты'),
+    BotCommand(command='/categories', description='контакты'),
 ]

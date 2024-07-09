@@ -4,7 +4,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from app.database.requests import get_categories, get_category_item
 
-main = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='каталог 📁')],
+main = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='меню товаров 📕'), KeyboardButton(text='категории 📁')],
                                      [KeyboardButton(text='о нас 😇')],
                                      [KeyboardButton(text='корзина 🗑️'), KeyboardButton(text='контакты 📱')]],
                                      resize_keyboard = True,
@@ -16,9 +16,7 @@ get = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='отправить н�
                                         resize_keyboard = True,
                                         input_field_placeholder='выберите пункт меню...')
 
-admin = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='добавить товар ✔️'), KeyboardButton(text='изменить товар ♻️')],
-                                      [KeyboardButton(text='удалить товар ❌')],
-                                      [KeyboardButton(text='список товаров 📁')]],
+admin = ReplyKeyboardMarkup(keyboard=[[KeyboardButton(text='добавить товар ✔️'), KeyboardButton(text='список товаров 📁')]],
                                         resize_keyboard = True,
                                         input_field_placeholder='выберите пункт меню...')
 async def categories_for_admin():
@@ -42,4 +40,10 @@ async def items(category_id):
     for item in all_items:
         keyboard.add(InlineKeyboardButton(text=item.name, callback_data=f"item_{item.id}"))
     keyboard.add(InlineKeyboardButton(text='на главную', callback_data='main'))
+    return keyboard.adjust(2).as_markup()
+
+async def item(item_id):
+    keyboard = InlineKeyboardBuilder()
+    keyboard.add(InlineKeyboardButton(text='удалить', callback_data=f"delete_{item_id}"))
+    keyboard.add(InlineKeyboardButton(text='изменить', callback_data=f"change_{item_id}"))
     return keyboard.adjust(2).as_markup()

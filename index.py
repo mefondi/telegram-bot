@@ -22,7 +22,7 @@ async def main():
     dp.include_router(admin_router)
     await bot.delete_webhook(drop_pending_updates=True)
     await bot.set_my_commands(commands=privet, scope=types.BotCommandScopeAllPrivateChats())
-    await dp.start_polling(bot, allowed_updates=['message', 'callback_query','edited_message'])
+    await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
 
 
 if __name__ == '__main__':
